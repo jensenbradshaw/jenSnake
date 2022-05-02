@@ -14,8 +14,12 @@ public class GamePanel extends JPanel implements ActionListener{
 	final int y[] = new int[GAME_UNITS];
 	int bodyParts = 6;
 	int applesEaten;
-	int appleX;
-	int appleY;
+	int appleX1;
+	int appleY1;
+	int appleX2;
+	int appleY2;
+	int appleX3;
+	int appleY3;
 	char direction = 'R';
 	boolean running = false;
 	Timer timer;
@@ -30,7 +34,9 @@ public class GamePanel extends JPanel implements ActionListener{
 		startGame();
 	}
 	public void startGame() {
-		newApple();
+		newApple(1);
+		newApple(2);
+		newApple(3);
 		running = true;
 		timer = new Timer(DELAY,this);
 		timer.start();
@@ -42,16 +48,18 @@ public class GamePanel extends JPanel implements ActionListener{
 	public void draw(Graphics g) {
 		
 		if(running) {
-			/* Draw grid lines.
+			// Draw grid lines.
 			for (int i=0;i<SCREEN_HEIGHT/UNIT_SIZE;i++) {
 				g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
 				g.drawLine(0, i*UNIT_SIZE, SCREEN_WIDTH, i*UNIT_SIZE);
 			}
-			*/
+			
 			
 			// Draw apple.
 			g.setColor(Color.red);
-			g.fillOval(appleX, appleY, UNIT_SIZE, UNIT_SIZE);
+			g.fillOval(appleX1, appleY1, UNIT_SIZE, UNIT_SIZE);
+			g.fillOval(appleX2, appleY2, UNIT_SIZE, UNIT_SIZE);
+			g.fillOval(appleX3, appleY3, UNIT_SIZE, UNIT_SIZE);
 			
 			// Draw snake head and body.
 			for(int i = 0;i<bodyParts;i++) {
@@ -73,9 +81,22 @@ public class GamePanel extends JPanel implements ActionListener{
 			gameOver(g);
 		}
 	}
-	public void newApple() {
-		appleX = random.nextInt((int)(SCREEN_WIDTH/UNIT_SIZE))*UNIT_SIZE;
-		appleY = random.nextInt((int)(SCREEN_HEIGHT/UNIT_SIZE))*UNIT_SIZE;
+	public void newApple(int i) {
+		switch(i) {
+		case 1:
+			appleX1 = random.nextInt((int)(SCREEN_WIDTH/UNIT_SIZE))*UNIT_SIZE;
+			appleY1 = random.nextInt((int)(SCREEN_HEIGHT/UNIT_SIZE))*UNIT_SIZE;
+			break;
+		case 2:
+			appleX2 = random.nextInt((int)(SCREEN_WIDTH/UNIT_SIZE))*UNIT_SIZE;
+			appleY2 = random.nextInt((int)(SCREEN_HEIGHT/UNIT_SIZE))*UNIT_SIZE;
+			break;
+		case 3:
+			appleX3 = random.nextInt((int)(SCREEN_WIDTH/UNIT_SIZE))*UNIT_SIZE;
+			appleY3 = random.nextInt((int)(SCREEN_HEIGHT/UNIT_SIZE))*UNIT_SIZE;
+			break;
+		}
+		
 	}
 	public void move() {
 		for(int i = bodyParts;i>0;i--) {
@@ -103,10 +124,20 @@ public class GamePanel extends JPanel implements ActionListener{
 		}
 	}
 	public void checkApple() {
-		if((x[0] == appleX) && (y[0] == appleY)) {
+		if((x[0] == appleX1) && (y[0] == appleY1)) {
 			bodyParts++;
 			applesEaten++;
-			newApple();
+			newApple(1);
+		}
+		if((x[0] == appleX2) && (y[0] == appleY2)) {
+			bodyParts++;
+			applesEaten++;
+			newApple(2);
+		}
+		if((x[0] == appleX3) && (y[0] == appleY3)) {
+			bodyParts++;
+			applesEaten++;
+			newApple(3);
 		}
 	}
 	public void checkCollisions() {
