@@ -12,7 +12,7 @@ public class GamePanel extends JPanel implements ActionListener{
 	static final int DELAY = 75;
 	final int x[] = new int[GAME_UNITS];
 	final int y[] = new int[GAME_UNITS];
-	int bodyParts = 6;
+	int bodyParts;
 	int applesEaten;
 	int appleX1;
 	int appleY1;
@@ -20,7 +20,7 @@ public class GamePanel extends JPanel implements ActionListener{
 	int appleY2;
 	int appleX3;
 	int appleY3;
-	char direction = 'R';
+	char direction;
 	boolean running = false;
 	Timer timer;
 	Random random;
@@ -34,6 +34,13 @@ public class GamePanel extends JPanel implements ActionListener{
 		startGame();
 	}
 	public void startGame() {
+		bodyParts = 6;
+		for(int i = bodyParts;i>=0;i--) {
+			x[i] = -1*i*UNIT_SIZE;
+			y[i] = 0;
+		}
+		applesEaten = 0;
+		direction = 'R';
 		newApple(1);
 		newApple(2);
 		newApple(3);
@@ -48,12 +55,12 @@ public class GamePanel extends JPanel implements ActionListener{
 	public void draw(Graphics g) {
 		
 		if(running) {
-			// Draw grid lines.
+			/* Draw grid lines.
 			for (int i=0;i<SCREEN_HEIGHT/UNIT_SIZE;i++) {
 				g.drawLine(i*UNIT_SIZE, 0, i*UNIT_SIZE, SCREEN_HEIGHT);
 				g.drawLine(0, i*UNIT_SIZE, SCREEN_WIDTH, i*UNIT_SIZE);
 			}
-			
+			*/
 			
 			// Draw apple.
 			g.setColor(Color.red);
@@ -164,6 +171,8 @@ public class GamePanel extends JPanel implements ActionListener{
 		}
 	}
 	public void gameOver(Graphics g) {
+		timer.stop();
+		
 		// Draw "game over" text.
 		g.setColor(Color.red);
 		g.setFont(new Font("Ink Free",Font.BOLD, 75));
@@ -175,6 +184,9 @@ public class GamePanel extends JPanel implements ActionListener{
 		g.setFont(new Font("Ink Free",Font.BOLD, 40));
 		FontMetrics metrics2 = getFontMetrics(g.getFont());
 		g.drawString("Score: "+applesEaten, (SCREEN_WIDTH - metrics2.stringWidth("Score: "+applesEaten))/2, g.getFont().getSize());
+		
+		// Draw restart instruction,
+		g.drawString("Press 'R' to restart.", (SCREEN_WIDTH - metrics2.stringWidth("Press 'R' to restart."))/2, (SCREEN_HEIGHT/2)+100);
 	}
 	@Override
 	public void actionPerformed(ActionEvent e) {
@@ -214,6 +226,10 @@ public class GamePanel extends JPanel implements ActionListener{
 					direction = 'D';
 				}
 				break;
+			case KeyEvent.VK_R:
+				if(!running) {
+					startGame();
+				}
 			}
 		}
 	}
